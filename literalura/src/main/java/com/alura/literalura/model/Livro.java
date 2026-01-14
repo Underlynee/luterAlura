@@ -82,7 +82,7 @@ public class Livro {
         return
                 ", numeroId=" + numeroId +
                 ", titulo=" + titulo + '\'' +
-                "autor=" + autor + '\'' +
+                ", autor:" + autor + '\'' +
                 ", idioma='" + idioma + '\'';
     }
 }

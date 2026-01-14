@@ -19,11 +19,9 @@ public class Principal {
     private ConsumirAPI consumo = new ConsumirAPI();
     private ConverterDados conversor = new ConverterDados();
 
-    // Repositórios injetados via construtor
     private LivroRepository livroRepository;
     private AutorRepository autorRepository;
 
-    // Construtor obrigatório para injeção de dependência na Main
     public Principal(LivroRepository livroRepository, AutorRepository autorRepository) {
         this.livroRepository = livroRepository;
         this.autorRepository = autorRepository;
@@ -54,18 +52,18 @@ public class Principal {
                 case 1:
                     buscarLivroPeloTitulo();
                     break;
-//                case 2:
-//                    listarLivrosRegistrados();
-//                    break;
-//                case 3:
-//                    listarAutoresRegistrados();
-//                    break;
-//                case 4:
-//                    listarAutoresVivos();
-//                    break;
-//                case 5:
-//                    listarLivrosPorIdioma();
-//                    break;
+                case 2:
+                    listarLivrosRegistrados();
+                    break;
+                case 3:
+                    listarAutoresRegistrados();
+                    break;
+                case 4:
+                    listarAutoresVivos();
+                    break;
+                case 5:
+                    listarLivrosPorIdioma();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -75,7 +73,8 @@ public class Principal {
         }
     }
 
-    // OPÇÃO 1: BUSCAR NA WEB E SALVAR
+
+
 
     private void buscarLivroPeloTitulo() {
         System.out.println("Qual livro você deseja pesquisar?");
@@ -127,6 +126,76 @@ public class Principal {
         }
     }
 
+    private void listarLivrosRegistrados() {
 
+        System.out.println("--- Livros Registrados ---");
+        List<Livro> livrosRegistados = livroRepository.findAll();
+
+        if(!livrosRegistados.isEmpty()) {
+            livrosRegistados.stream()
+                    .sorted(Comparator.comparing(Livro::getTitulo))
+                    .forEach(System.out::println);
+        } else {
+            System.out.println("Nenhum livro encontrado");
+        }
+
+    }
+
+    private void listarAutoresRegistrados() {
+        System.out.println("--- Autores Registrados ---");
+        List<Autor> autoresRegistrados = autorRepository.findAll();
+
+        if(!autoresRegistrados.isEmpty()) {
+
+            autoresRegistrados.stream()
+                    .sorted(Comparator.comparing(Autor::getNome))
+                    .forEach(System.out::println);
+        } else {
+            System.out.println("Nenhum Autor registado!");
+
+
+        }
+
+
+    }
+
+    private void listarAutoresVivos() {
+        System.out.println("Qual o ano final você gostaria?");
+        var ano = leitura.nextInt();
+        leitura.nextLine();
+
+        List<Autor> autores = autorRepository.findByAnoFalecimento(ano);
+
+        if(!autores.isEmpty()) {
+            autores.forEach(System.out::println);
+        }else{
+            System.out.println("Nenhum autor vivo se entcontra esse ano.");
+
+        }
+
+    }
+
+    private void listarLivrosPorIdioma() {
+
+        System.out.println("""
+                Digite o idioma para busca:
+                es - Espanhol
+                en - Inglês
+                fr - Francês
+                pt - Português
+                """);
+        var idioma = leitura.nextLine();
+
+        List<Livro> idiomas = livroRepository.findByIdioma(idioma);
+
+        if (!idiomas.isEmpty()) {
+            idiomas.forEach(System.out::println);
+
+        } else {
+            System.out.println("Nenhum livro encontrado com esse idioma!");
+        }
+
+
+    }
 
 }
